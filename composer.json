@@ -1,0 +1,38 @@
+{
+    "type": "library",
+    "name": "kherge/xdebug-coverage",
+    "description": "Simplifies handling of code coverage.",
+    "keywords": ["coverage", "xdebug"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/kherge/xdebug-coverage/issues",
+        "source": "https://github.com/kherge/xdebug-coverage"
+    },
+
+    "authors": [
+        {
+            "name": "Kevin Herrera",
+            "email": "kevin@herrera.io",
+            "homepage": "http://kevin.herrera.io/",
+            "role": "Developer"
+        }
+    ],
+
+    "autoload": {
+        "psr-4": {
+            "KHerGe\\Xdebug\\": "src/KHerGe/Xdebug"
+        }
+    },
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },
+
+    "require": {
+        "php": ">=5.3",
+
+        "ext-xdebug": "*"
+    }
+}
