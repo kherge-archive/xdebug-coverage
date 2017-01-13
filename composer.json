@@ -5,8 +5,8 @@
     "keywords": ["coverage", "xdebug"],
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/kherge/xdebug-coverage/issues",
-        "source": "https://github.com/kherge/xdebug-coverage"
+        "issues": "https://github.com/kherge-php/xdebug-coverage/issues",
+        "source": "https://github.com/kherge-php/xdebug-coverage"
     },
 
     "authors": [
