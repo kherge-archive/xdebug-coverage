@@ -26,11 +26,11 @@
 
     "extra": {
         "branch-alias": {
-            "dev-master": "1.x-dev"
+            "dev-master": "2.x-dev"
         }
     },
 
     "require": {
-        "php": ">=5.3"
+        "php": ">=7.1"
     }
 }
