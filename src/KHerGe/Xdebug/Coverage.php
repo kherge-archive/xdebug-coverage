@@ -10,69 +10,74 @@ namespace KHerGe\Xdebug;
 class Coverage
 {
     /**
-     * The original code coverage mode.
+     * Checks if code coverage is currently enabled.
      *
-     * @var boolean
+     * @return boolean Returns `true` if enabled or `false` if not.
      */
-    private static $covering;
-
-    /**
-     * Executes a callback with code coverage temporarily disabled.
-     *
-     * @param callable $callback The callback.
-     */
-    public static function ignore(callable $callback)
+    public static function isEnabled() : bool
     {
-        self::stop();
-
-        $callback();
-
-        self::resume();
+        return self::hasXdebug() && xdebug_code_coverage_started();
     }
 
     /**
-     * Returns the original code coverage mode.
+     * Executes a callable with code coverage enabled.
      *
-     * @param boolean $reset Allows the cached mode to be reset.
+     * @param callable $callable The callable.
+     * @param integer  $options  The new xdebug coverage options.
      *
-     * @return boolean Returns `true` if covering, `false` if not.
+     * @return mixed The result of the callable.
      */
-    public static function isCovering($reset = false)
+    public static function with(callable $callable, int $options = 0)
     {
-        if ($reset || (null === self::$covering)) {
-            self::$covering = xdebug_code_coverage_started();
+        $enabled = self::hasXdebug();
+        $inherited = self::isEnabled();
+
+        if ($enabled && !$inherited) {
+            xdebug_start_code_coverage($options);
         }
 
-        return self::$covering;
+        $result = $callable();
+
+        if ($enabled && !$inherited) {
+            xdebug_stop_code_coverage(false);
+        }
+
+        return $result;
     }
 
     /**
-     * Checks if code coverage is currently active.
+     * Executes a callable with code coverage *disabled*.
      *
-     * @return boolean Returns `true` if active, `false` if not.
+     * @param callable $callable The callable.
+     * @param integer  $options  The current xdebug coverage options.
+     *
+     * @return mixed The result of the callable.
      */
-    public static function isCurrentlyCovering()
+    public static function without(callable $callable, int $options = 0)
     {
-        return xdebug_code_coverage_started();
+        $enabled = self::hasXdebug();
+        $inherited = self::isEnabled();
+
+        if ($enabled && $inherited) {
+            xdebug_stop_code_coverage(false);
+        }
+
+        $result = $callable();
+
+        if ($enabled && $inherited) {
+            xdebug_start_code_coverage($options);
+        }
+
+        return $result;
     }
 
     /**
-     * Resumes code coverage.
+     * Checks if xdebug is available.
+     *
+     * @return boolean Returns `true` if it is or `false` if not.
      */
-    public static function resume()
+    private static function hasXdebug() : bool
     {
-        if (self::isCovering()) {
-            xdebug_start_code_coverage();
-        }
-    }
-
-    /**
-     * Stops code coverage.
-     */
-    public static function stop()
-    {
-        if (self::isCovering()) {
-            xdebug_stop_code_coverage();
-        }
+        return extension_loaded('xdebug');
     }
 }
